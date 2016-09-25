@@ -31,7 +31,7 @@ The following **additional** features are implemented:
 
 Here's a walkthrough of implemented user stories:
 
-<img src='http://imgur.com/a/sLXij' title='Video Walkthrough' width='' alt='Video Walkthrough' />
+![Video Walkthrough](ToDo.gif)
 
 GIF created with [LiceCap](http://www.cockos.com/licecap/).
 
@@ -41,7 +41,7 @@ First android app that I have built following the code path tutorials
 
 ## License
 
-    Copyright [2016] 
+    Copyright [2016]
 
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.

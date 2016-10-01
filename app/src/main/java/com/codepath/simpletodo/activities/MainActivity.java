@@ -1,14 +1,18 @@
-package com.codepath.simpletodo;
+package com.codepath.simpletodo.activities;
 
 import android.content.Intent;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.view.Menu;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ListView;
+
+import com.codepath.simpletodo.CustomListAdapter;
+import com.codepath.simpletodo.R;
+import com.codepath.simpletodo.fragments.EditDialogFragment;
 
 import org.apache.commons.io.FileUtils;
 
@@ -19,7 +23,7 @@ import java.util.ArrayList;
 /**
  * Main activity class for the To do app
  */
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements EditDialogFragment.EditItemListener {
     ArrayList<String> items;
     ArrayAdapter<String> itemsAdapter;
     ListView lvlItems;
@@ -40,6 +44,15 @@ public class MainActivity extends AppCompatActivity {
         etNewItem = (EditText) findViewById(R.id.etNewItem);
         setupListViewListener();
     }
+
+    @Override
+    public void onSaveItemDialog(String inputText, int pos) {
+        items.remove(pos);
+        items.add(pos, inputText);
+        itemsAdapter.notifyDataSetChanged();
+        writeItems();
+    }
+
 
     /**
      * Read from file and initialize the adapter
@@ -66,6 +79,8 @@ public class MainActivity extends AppCompatActivity {
             writeItems();
         }
     }
+
+
 
     /**
      * Actions performed while adding an item
@@ -94,16 +109,19 @@ public class MainActivity extends AppCompatActivity {
                 }
         );
         lvlItems.setOnItemClickListener(
-            new AdapterView.OnItemClickListener() {
-                public void onItemClick(AdapterView<?> adapterView,
-                                           View item, int pos, long id) {
-                    Intent i = new Intent(MainActivity.this, EditItemActivity.class);
-                    i.putExtra("position", pos);
-                    i.putExtra("text", items.get(pos) );
-                    startActivityForResult(i, REQUEST_CODE);
+                new AdapterView.OnItemClickListener() {
+                    public void onItemClick(AdapterView<?> adapterView,
+                                            View item, int pos, long id) {
+                        showEditDialog(pos);
+                    }
                 }
-            }
         );
+    }
+
+    private void showEditDialog(int pos) {
+        FragmentManager fm = getSupportFragmentManager();
+        EditDialogFragment editNameDialog = EditDialogFragment.newInstance( pos, items.get(pos));
+        editNameDialog.show(fm, "fragment_edit_item");
     }
 
     /**
